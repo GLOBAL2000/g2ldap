@@ -4,8 +4,8 @@ require 'rubygems'
 require 'trollop'
 require 'active_ldap'
 
-require 'config'
-require 'library'
+require 'g2ldap-config'
+require 'g2ldap-library'
 
 t_to_al = {
   :name =>  "cn",

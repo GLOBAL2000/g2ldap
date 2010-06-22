@@ -10,10 +10,10 @@ def map_user_hash( origin, mappings, user )
     output[:sn] = user.sn unless output[:sn]
     ( output[:given_name] && output[:sn] ) ? delimiter = " " : delimiter = ""
     
-    output[:cn] = output[:given_name] + delimiter + output[:sn]
+    output[:cn] = output[:given_name].to_s + delimiter.to_s + output[:sn].to_s
   end
 
-  User.find(:all, :attribute => 'uidNumber', :value => origin[:uid]).empty? || raise("UID #{origin[:uid]} already exists.")
+  User.find(:all, :attribute => 'uidNumber', :value => origin[:uid]).empty? || raise("UID #{origin[:uid]} already exists.") if origin[:uid]
 
 #  puts "Mapping: #{output.inspect}"
   return output
@@ -53,6 +53,7 @@ def parse_new_user_default( attr, mappings )
     attr[:uid_number]+=1
   end
 
+  attr[:mail] = "#{attr[:uid]}@global2000.at" unless attr[:mail]
   attr[:home_directory] = "/home/#{attr[:uid]}" unless attr[:home_directory]
   attr[:login_shell] = "/bin/bash" unless attr[:login_shell]
 end

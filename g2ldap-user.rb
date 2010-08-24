@@ -69,7 +69,10 @@ cmd_opts =
 
 Trollop::die :groups, "must not be given in combination with add-groups or remove-groups" if (cmd_opts[:add_groups_given] || cmd_opts[:remove_groups_given]) && cmd_opts[:groups]
 Trollop::die :name, "must be given" unless cmd_opts[:name_given]
+Trollop::die :teams, "teams mus be given" if ( !cmd_opts[:teams] && cmd == "add" )
 Trollop::die :teams, "invalid teams given" unless (cmd_opts[:teams] - $valid_teams).empty? if cmd_opts[:teams]
+Trollop::die :type, "employment type must be given" if ( !cmd_opts[:type] && cmd == "add" )
+Trollop::die :type, "invalid employment type given" unless ($valid_types.include?(cmd_opts[:type])) if cmd_opts[:type]
 
 case cmd
 when "add"

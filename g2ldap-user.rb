@@ -24,7 +24,7 @@ t_to_al = {
 
 user_attributes = Hash.new
 $valid_teams = ["adler","content","famos","fundraising","komet","oe","overhead","projekte","tracker","vogel"]
-$valid_types = ["praktikum","fix"]
+$valid_types = ["fix","zivi","prakt"]
 
 SUB_COMMANDS = %w(add del mod ls)
 global_opts = Trollop::options do

@@ -14,8 +14,11 @@ def map_user_hash( origin, mappings, user )
   end
 
   User.find(:all, :attribute => 'uidNumber', :value => origin[:uid]).empty? || raise("UID #{origin[:uid]} already exists.") if origin[:uid]
+  
+  output[:department_number] = output[:department_number].join(",") if output[:department_number]
+  output[:car_license] = (Date.today >> output[:car_license]).to_s if output[:car_license]
 
-#  puts "Mapping: #{output.inspect}"
+  #puts "Mapping: #{output.inspect}"
   return output
 end
 
@@ -56,6 +59,7 @@ def parse_new_user_default( attr, mappings )
   attr[:mail] = "#{attr[:uid]}@global2000.at" unless attr[:mail]
   attr[:home_directory] = "/home/#{attr[:uid]}" unless attr[:home_directory]
   attr[:login_shell] = "/bin/bash" unless attr[:login_shell]
+  attr[:car_license] = (Date.today >> 1).to_s unless attr[:car_license]
 end
 
 def mod_obj( obj, attributes )

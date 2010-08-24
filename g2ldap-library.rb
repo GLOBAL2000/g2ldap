@@ -1,3 +1,10 @@
+# Variables needed globally
+
+$valid_teams = ["adler","content","famos","fundraising","komet","oe","overhead","projekte","tracker","vogel"]
+$valid_types = ["fix","zivi","prakt"]
+
+# Definitions
+
 def map_user_hash( origin, mappings, user )
   output = Hash.new
   mappings.each do | key, val |

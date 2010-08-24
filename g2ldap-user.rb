@@ -17,10 +17,14 @@ t_to_al = {
   :mail => "mail",
   :home => "home_directory",
   :shell => "login_shell",
+  :expires => "car_license",
+  :team => "department_number",
+  :type => "employee_type",
 }
 
 user_attributes = Hash.new
-
+$valid_teams = ["adler","content","famos","fundraising","komet","oe","overhead","projekte","tracker","vogel"]
+$valid_types = ["praktikum","fix"]
 
 SUB_COMMANDS = %w(add del mod ls)
 global_opts = Trollop::options do
@@ -50,6 +54,10 @@ cmd_opts =
     opt :groups, "Groups for the user, ATTENTION user will be removed from all other groups", :type => :strings
     opt :add_groups, "Groups for the user to added to", :type => :strings
     opt :remove_groups, "Remove user from these groups", :type => :strings
+    opt :expires, "Months till user invalidates", :type => :integer
+    opt :team, "Team, valid values are: " + $valid_teams.join(","), :type => :strings
+    opt :type, "Employment, valid values are: " + $valid_types.join(","), :type => :string
+
   end
   when "ls"
     Trollop::options do

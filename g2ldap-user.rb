@@ -18,7 +18,7 @@ t_to_al = {
   :home => "home_directory",
   :shell => "login_shell",
   :expires => "car_license",
-  :team => "department_number",
+  :teams => "department_number",
   :type => "employee_type",
 }
 
@@ -55,9 +55,9 @@ cmd_opts =
     opt :add_groups, "Groups for the user to added to", :type => :strings
     opt :remove_groups, "Remove user from these groups", :type => :strings
     opt :expires, "Months till user invalidates", :type => :integer
-    opt :team, "Team, valid values are: " + $valid_teams.join(","), :type => :strings
+    opt :teams, "Team, valid values are: " + $valid_teams.join(","), :type => :strings
     opt :type, "Employment, valid values are: " + $valid_types.join(","), :type => :string
-
+    opt :noop, "Do not actually save the user", :default => false
   end
   when "ls"
     Trollop::options do
@@ -69,6 +69,7 @@ cmd_opts =
 
 Trollop::die :groups, "must not be given in combination with add-groups or remove-groups" if (cmd_opts[:add_groups_given] || cmd_opts[:remove_groups_given]) && cmd_opts[:groups]
 Trollop::die :name, "must be given" unless cmd_opts[:name_given]
+Trollop::die :teams, "invalid teams given" unless (cmd_opts[:teams] - $valid_teams).empty? if cmd_opts[:teams]
 
 case cmd
 when "add"
@@ -103,5 +104,7 @@ when "ls"
   puts "Groups: #{groups.join(', ')}"
 end
 
-save_groups_for_user( user, cmd_opts )
-user.save
+unless cmd_opts[:noop] then
+  save_groups_for_user( user, cmd_opts )
+  user.save
+end

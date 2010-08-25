@@ -20,6 +20,7 @@ t_to_al = {
   :expires => "car_license",
   :teams => "department_number",
   :type => "employee_type",
+  :description => "description",
 }
 
 user_attributes = Hash.new
@@ -55,6 +56,7 @@ cmd_opts =
     opt :expires, "Months till user invalidates", :type => :integer
     opt :teams, "Team, valid values are: " + $valid_teams.join(","), :type => :strings
     opt :type, "Employment, valid values are: " + $valid_types.join(","), :type => :string
+    opt :description, "Any describing text you want", :type => :string
     opt :noop, "Do not actually save the user", :default => false
   end
   when "ls"

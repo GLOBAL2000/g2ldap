@@ -1,7 +1,7 @@
 # Variables needed globally
 
 $valid_teams = ["adler","content","famos","fundraising","komet","oe","overhead","projekte","tracker","vogel"]
-$valid_types = ["fix","zivi","prakt"]
+$valid_types = ["fix","zivi","prakt","sonstig"]
 
 # Definitions
 

@@ -104,7 +104,7 @@ when "ls"
   puts "Groups: #{groups.join(', ')}"
 end
 
-unless cmd_opts[:noop] then
-  save_groups_for_user( user, cmd_opts )
+unless cmd_opts[:noop] or cmd == "del" then
   user.save
+  save_groups_for_user( user, cmd_opts )
 end

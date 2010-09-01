@@ -28,7 +28,7 @@ user_attributes = Hash.new
 SUB_COMMANDS = %w(add del mod ls)
 global_opts = Trollop::options do
   banner "GLOBAL2000 utility for LDAP users"
-  banner "Usage see INSERT_NAME_HERE #{SUB_COMMANDS.join("|")} --help"
+  banner "Usage see #{$0} #{SUB_COMMANDS.join("|")} --help"
   stop_on SUB_COMMANDS
 end
 

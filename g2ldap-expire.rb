@@ -11,7 +11,7 @@ require './g2ldap-library'
 SUB_COMMANDS = %w(report check)
 global_opts = Trollop::options do
   banner "GLOBAL2000 utility to check expired accounts"
-  banner "Usage see INSERT_NAME_HERE #{SUB_COMMANDS.join("|")} --help"
+  banner "Usage see #{$0} #{SUB_COMMANDS.join("|")} --help"
   stop_on SUB_COMMANDS
 end
 

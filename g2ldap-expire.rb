@@ -15,13 +15,15 @@ global_opts = Trollop::options do
   stop_on SUB_COMMANDS
 end
 
+default_out_file = "~/Desktop/g2_expire_report.csv"
 
 cmd = ARGV.shift
 cmd_opts =
   case cmd
   when "report"
     Trollop::options do
-    opt :file, "Output file", :type => :string, :default => "~/Desktop/expire_report"
+    opt :file, "Output to file #{default_out_file}"
+    opt :name, "File to save report to", :type => :string, :default => default_out_file
   end
   when "check"
     Trollop::options do
@@ -40,8 +42,14 @@ when "report"
 
   report.unshift ["username","name","info","typ","ablaufdatum"]
   report.unshift ["valid types are: " + $valid_types.keys.join(",") ]
-  report.each { |r| puts r.join(";") }
-
+  if cmd_opts[:file_given] or cmd_opts[:name_given] then
+    f = File.new(File.expand_path(cmd_opts[:name]), "w") 
+    report.each { |r| f.puts r.join(";") }
+    f.close
+  else
+    puts r.join(";") 
+  end
+  
 when "check"
   puts "Folgende user sind bereits abgelaufen: "+get_expired_users().join(",")
   begin

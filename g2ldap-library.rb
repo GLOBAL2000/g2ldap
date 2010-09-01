@@ -6,7 +6,9 @@ $valid_types = {
   "sonstiges" => [2,2],
   "karenz" => [0,6],
   "ehemalig" => [0,4],
+  "extern" => [6,6], #Leute die zwar im Büro sind aber nicht zu GLOBAL gehören
 }
+$valid_types.default = [0,0]
 
 # Definitions
 

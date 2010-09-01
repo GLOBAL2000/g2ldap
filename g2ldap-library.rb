@@ -1,5 +1,12 @@
 # Variables needed globally
-$valid_types = ["fest","zivi","praktikum","sonstiges","karenz","ehemalig"]
+$valid_types = {
+  "fest" => [12,12],
+  "zivi" => [9,2],
+  "praktikum" => [4,2],
+  "sonstiges" => [2,2],
+  "karenz" => [0,6],
+  "ehemalig" => [0,4],
+}
 
 # Definitions
 
@@ -63,7 +70,7 @@ def parse_new_user_default( attr, mappings )
   attr[:mail] = "#{attr[:uid]}@global2000.at" unless attr[:mail]
   attr[:home_directory] = "/home/#{attr[:uid]}" unless attr[:home_directory]
   attr[:login_shell] = "/bin/bash" unless attr[:login_shell]
-  attr[:car_license] = (Date.today >> 1).to_s unless attr[:car_license]
+  attr[:car_license] = (Date.today >> $valid_types[attr[:employee_type]][0]).to_s unless attr[:car_license]
 end
 
 def mod_obj( obj, attributes )

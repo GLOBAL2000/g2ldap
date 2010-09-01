@@ -54,7 +54,7 @@ cmd_opts =
     opt :add_groups, "Groups for the user to added to", :type => :strings
     opt :remove_groups, "Remove user from these groups", :type => :strings
     opt :expires, "Months till user invalidates", :type => :integer
-    opt :type, "Employment, valid values are: " + $valid_types.join(","), :type => :string
+    opt :type, "Employment, valid values are: " + $valid_types.keys.join(","), :type => :string
     opt :description, "Any describing text you want", :type => :string
     opt :noop, "Do not actually save the user", :default => false
   end

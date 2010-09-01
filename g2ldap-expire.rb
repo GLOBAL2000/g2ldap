@@ -6,7 +6,7 @@ require 'active_ldap'
 require 'date'
 
 require 'g2ldap-config'
-require './g2ldap-library'
+require 'g2ldap-library'
 
 SUB_COMMANDS = %w(report check)
 global_opts = Trollop::options do

@@ -43,26 +43,17 @@ when "report"
   report.each { |r| puts r.join(";") }
 
 when "check"
-  # puts "Folgende user sind bereits abgelaufen: "
-  #get_expired_users() -> liste an abgelaufenen usern
-  #while
-  # puts "Name des users eintippen, der verlängert werden soll:", gets input
-  # extend_user_validity input
+  puts "Folgende user sind bereits abgelaufen: "+get_expired_users().join(",")
+  begin
+    print "Name des users eintippen, der verlängert werden soll: "
+    input = gets.chomp
+    extend_user_validity get_user(input) unless input.empty?
+  end until input.empty?
 
-  #User.find(:all).collect { |user| 
-  #if check_user_validity(user)
-  # extend_user_validity user
-  #}
-  # end
-
-
-  #extend_user_validity( user )
-  #extend_user_validity_by( user, monate )
-
-  # def extend_user_validity( user )
-  # puts "Um wieviele Monate soll User verlängert werden? [default verängerungswert]", gets
-  # extend_user_validity( user monate)
-  # end
-
+  User.find(:all).collect { |user| 
+    if check_user_validity(user) then
+      extend_user_validity(user)
+    end
+  }
 end
 

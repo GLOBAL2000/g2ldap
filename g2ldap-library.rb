@@ -133,3 +133,39 @@ def get_group( groupname, must_exist=true)
     return Group.new( groupname )
   end
 end
+
+def gen_report_line ( user )
+  return [user.uid, user.cn, user.description, user.employee_type, user.car_license ]
+end
+
+def check_user_validity (user )
+  exp = Date.parse(user.car_license) 
+  if exp <= Date.today>>2 and exp > Date.today then
+    return true
+  else
+    return false
+  end
+end
+
+def get_expired_users ()
+  out = []
+  User.find(:all).collect { |user| out.push(user.uid) if Date.parse(user.car_license) <= Date.today }
+  return out
+end
+
+def extend_user_validity( user )
+  unless user.employee_type.nil?
+    type_str = "mit dem typ #{user.employee_type}"
+  else
+    type_str = "ohne typ"
+  end
+  print "Um wieviele Monate soll #{user.uid} #{type_str} verlängert werden? [#{$valid_types[user.employee_type][1]}] "
+  input = gets.chomp 
+  input = $valid_types[user.employee_type][1].to_s if input.empty?
+  extend_user_validity_by( user, input )
+end
+
+def extend_user_validity_by( user, month )
+  user.car_license = (Date.today>>month.to_i).to_s
+  user.save
+end

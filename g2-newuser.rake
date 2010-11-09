@@ -37,9 +37,10 @@ task :afshome => [:init, :afsuser] do
   sh "fs mkm #{@afs_prefix}/#{@name} home.#{@name}"
   sh "fs setacl #{@afs_prefix}/#{@name} #{@name} write"
   sh "fs setacl #{@afs_prefix}/#{@name} mrbackupuserhimself read"
-  sh "fs setquota #{@afs_prefix}/#{@name} #{@name} -max #{@quota}"
+  sh "fs setquota #{@afs_prefix}/#{@name} -max #{@quota}"
   sh "touch #{@afs_prefix}/#{@name}/.RESET_ALL"
   sh "chown -R #{@name}:users #{@afs_prefix}/#{@name}"
+  sh "chmod go-rwx #{@afs_prefix}/#{@name}"
 end
 
 desc "Create Kerberos user"

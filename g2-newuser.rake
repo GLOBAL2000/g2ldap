@@ -98,7 +98,7 @@ task :ldapuser => [:read_ldap] do
 end
 
 desc "Create new user"
-task :default => [:read_ldap, :recovery, :ldapuser, :kerberosuser, :afsuser, :afshome] do
+task :default => [:read_ldap, :recovery, :ldapuser, :afsuser, :afshome, :kerberosuser] do
 
 end
 

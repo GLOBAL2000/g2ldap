@@ -73,6 +73,7 @@ def parse_new_user_default( attr, mappings )
   attr[:home_directory] = "/afs/global2000.at/home/#{attr[:uid]}" unless attr[:home_directory]
   attr[:login_shell] = "/bin/bash" unless attr[:login_shell]
   attr[:car_license] = (Date.today >> $valid_types[attr[:employee_type]][0]).to_s unless attr[:car_license]
+  attr[:user_password] = "{SASL}#{attr[:uid]}@GLOBAL2000.AT" unless attr[:user_password]
 end
 
 def mod_obj( obj, attributes )

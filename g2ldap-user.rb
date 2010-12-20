@@ -21,6 +21,7 @@ t_to_al = {
   :teams => "department_number",
   :type => "employee_type",
   :description => "description",
+  :password => "user_password",
 }
 
 user_attributes = Hash.new
@@ -56,6 +57,7 @@ cmd_opts =
     opt :expires, "Months till user invalidates", :type => :integer
     opt :type, "Employment, valid values are: " + $valid_types.keys.join(","), :type => :string
     opt :description, "Any describing text you want", :type => :string
+    opt :password, "User Password, defaults to using SASL/Kerberos", :type => :string
     opt :noop, "Do not actually save the user", :default => false
   end
   when "ls"

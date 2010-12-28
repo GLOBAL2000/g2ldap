@@ -85,8 +85,9 @@ end
 
 desc "Check that user already exists in LDAP/System"
 task :check_ldap => [:read_minimal] do
-  sh "id -u #{@userdata[:name]} &> /dev/null"
-  ! $?.exitstatus or raise "User zuerst im LDAP/System anlegen"
+  sh "id -u #{@userdata[:name]}" do |ok, res|
+    raise "User zuerst im LDAP/System anlegen" unless ok
+  end
 end
 
 desc "Create LDAP user"

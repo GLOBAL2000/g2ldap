@@ -94,7 +94,7 @@ desc "Create LDAP user"
 task :ldapuser => [:read_ldap] do
   command = "/usr/local/bin/g2ldap-user.rb add --name '#{@userdata[:name]}' --givenname '#{@userdata[:givenname]}' --surname '#{@userdata[:surname]}' --type '#{@userdata[:type]}'"
   command += " --groups '#{@userdata[:groups]}'" unless @userdata[:groups].empty?
-  command += " --desc '#{@userdata[:desc]}'" unless @userdata[:desc].empty?
+  command += " --description '#{@userdata[:desc]}'" unless @userdata[:desc].empty?
   sh command
 end
 

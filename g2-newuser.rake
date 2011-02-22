@@ -6,9 +6,14 @@ require 'highline/import'
 @userdata = Hash.new
 
 check_if_user_exists = Proc.new { |usr|
-  `id -u #{usr} 2> /dev/null`
+  `g2ldap-user.rb ls --name #{usr} 2> /dev/null`
   ($?.exitstatus == 0) ? false : true
 }
+
+def get_user_id
+  id = `g2ldap-user.rb ls --name #{@userdata[:name]} | grep uidNumber`
+  id[/\AuidNumber: (\d{5})\z/]
+end
 
 if ENV['dryrun']
   alias sh puts
@@ -37,6 +42,7 @@ task :read_minimal do
     q.case = :down
     q.validate = check_if_user_exists
   end
+  @userdata[:type] = ENV['type'] || ask("Typ (sonstiges, ehemalig, fest, karenz, extern, praktikum, zivi): ") { |q| q.validate = /\A(sonstiges|ehemalig|fest|karenz|extern|praktikum|zivi)\z/ }
 end
 
 desc "Read info needed for mail"
@@ -48,16 +54,23 @@ end
 
 desc "Read info needed for LDAP"
 task :read_ldap => [:read_minimal, :read_mail] do
-  @userdata[:type] = ENV['type'] || ask("Typ: ") { |q| q.validate = /\A(sonstiges|ehemalig|fest|karenz|extern|praktikum|zivi)\z/ }
   @userdata[:groups] = ENV['groups'] || ask("Gruppen: ")
   @userdata[:desc] = ENV['desc'] || ask("Beschreibung: ")
 end
 
 desc "Create afs user"
 task :afsuser => [:read_minimal, :check_ldap] do
-  userid = `id -u #{@userdata[:name]}`
+  userid = get_user_id
   sh "pts createuser -name #{@userdata[:name]} -id #{userid}"
-  # GROUPS here!!
+  case @userdata[:type]
+  when "fest", "zivi"
+    sh "pts adduser #{@userdata[:name]} fest"
+  when "praktikum"
+    @userdata[:prak_team] = ENV['prak_team'] || ask("Praktikum für welches Team (fr, oea, oh, pmi, proj, tikam): ") { |q| q.validate = /\A(fr|oea|oh|pmi|proj|tikam)\z/ }
+    sh "pts adduser -user #{@userdata[:name]} -group praktika-#{@userdata[:prak_team]}"
+  else
+    puts "AFS Rechte bitte händisch einrichten"
+  end
 end
 
 desc "Create afs home"
@@ -85,9 +98,7 @@ end
 
 desc "Check that user already exists in LDAP/System"
 task :check_ldap => [:read_minimal] do
-  sh "sleep 3 && id -u #{@userdata[:name]}" do |ok, res|
-    raise "User zuerst im LDAP/System anlegen" unless ok
-  end
+  !check_if_user_exists.call(@userdata[:name]) or raise "User zuerst im LDAP/System anlegen"
 end
 
 desc "Create LDAP user"

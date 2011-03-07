@@ -12,7 +12,7 @@ check_if_user_exists = Proc.new { |usr|
 
 def get_user_id
   id = `g2ldap-user.rb ls --name #{@userdata[:name]} | grep uidNumber`
-  id[/\AuidNumber: (\d{5})\z/]
+  return id[/(\d{5})/]
 end
 
 if ENV['dryrun']

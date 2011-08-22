@@ -40,7 +40,7 @@ task :read_minimal do
   @userdata[:name] = ENV['name'] || ask("Benutzername:  ") do |q| 
     q.responses[:not_valid] = "Username existiert bereits."
     q.case = :down
-    q.validate = check_if_user_exists
+    q.validate = check_if_user_exists unless ENV['dryrun']
   end
   @userdata[:type] = ENV['type'] || ask("Typ (sonstiges, ehemalig, fest, karenz, extern, praktikum, zivi): ") { |q| q.validate = /\A(sonstiges|ehemalig|fest|karenz|extern|praktikum|zivi)\z/ }
 end
@@ -60,8 +60,8 @@ end
 
 desc "Create afs user"
 task :afsuser => [:read_minimal, :check_ldap] do
-  userid = get_user_id
-  sh "pts createuser -name #{@userdata[:name]} -id #{userid}"
+  @userdata[:userid] = get_user_id
+  sh "pts createuser -name #{@userdata[:name]} -id #{@userdata[:userid]}"
   case @userdata[:type]
   when "fest", "zivi"
     sh "pts adduser #{@userdata[:name]} fest"
@@ -76,7 +76,7 @@ end
 desc "Create afs home"
 task :afshome => [:read_minimal, :afsuser] do
   sh "vos create afs b home.#{@userdata[:name]}"
-  sh "fs mkm #{@afs_prefix}/#{@userdata[:name]} home.#{@userdata[:name]}"
+  sh "fs mkm #{@afs_prefix}/#{@userdata[:name]} home.#{@userdata[:userid]}"
   sh "fs setacl #{@afs_prefix}/#{@userdata[:name]} #{@userdata[:name]} write"
   sh "fs setacl #{@afs_prefix}/#{@userdata[:name]} mrbackupuserhimself read"
   sh "fs setquota #{@afs_prefix}/#{@userdata[:name]} -max #{@quota}"
@@ -98,7 +98,7 @@ end
 
 desc "Check that user already exists in LDAP/System"
 task :check_ldap => [:read_minimal] do
-  !check_if_user_exists.call(@userdata[:name]) or raise "User zuerst im LDAP/System anlegen"
+  !check_if_user_exists.call(@userdata[:name]) or raise "User zuerst im LDAP/System anlegen" unless ENV['dryrun']
 end
 
 desc "Create LDAP user"

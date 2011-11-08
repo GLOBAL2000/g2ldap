@@ -114,6 +114,11 @@ task :default => [:read_ldap, :recovery, :ldapuser, :afsuser, :afshome, :kerbero
 
 end
 
+desc "Create new user without afs"
+task :noafs => [:read_ldap, :recovery, :ldapuser, :kerberosuser] do
+
+end
+
 desc "Provide fast recovery info"
 task :recovery do
   command = "Recovery: name='#{@userdata[:name]}' givenname='#{@userdata[:givenname]}' surname='#{@userdata[:surname]}' type='#{@userdata[:type]}'"

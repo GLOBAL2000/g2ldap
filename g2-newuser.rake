@@ -75,7 +75,7 @@ end
 
 desc "Create afs home"
 task :afshome => [:read_minimal, :afsuser] do
-  sh "vos create afs b home.#{@userdata[:userid]}"
+  sh "vos create afs a home.#{@userdata[:userid]}"
   sh "fs mkm #{@afs_prefix}/#{@userdata[:name]} home.#{@userdata[:userid]}"
   sh "fs setacl #{@afs_prefix}/#{@userdata[:name]} #{@userdata[:name]} write"
   sh "fs setacl #{@afs_prefix}/#{@userdata[:name]} mrbackupuserhimself read"
